@@ -17,9 +17,9 @@
 typedef struct _EncodeInfo
 {
     /* Source Image info */
-    char *src_image_fname;
-    FILE *fptr_src_image;
-    uint image_capacity;
+    char *src_image_fname; //
+    FILE *fptr_src_image; //
+    uint image_capacity; //
     uint bits_per_pixel;
     char image_data[MAX_IMAGE_BUF_SIZE];
 
