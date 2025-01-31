@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <!-- Original Image Pixels -->
+  <rect x="50" y="50" width="200" height="200" fill="#e0e0e0" stroke="black"/>
+  <text x="150" y="160" text-anchor="middle" font-size="16">Original Image</text>
+
+  <!-- Hidden Message Representation -->
+  <rect x="350" y="50" width="200" height="200" fill="#c0c0c0" stroke="black"/>
+  <text x="450" y="100" text-anchor="middle" font-size="14">Hidden Message:</text>
+  <text x="450" y="130" text-anchor="middle" font-size="12">"My password is SECRET ;)"</text>
+
+  <!-- Arrow showing transformation -->
+  <path d="M260,150 Q330,150 350,150" fill="none" stroke="blue" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+    </marker>
+  </defs>
+
+  <!-- LSB Representation -->
+  <text x="300" y="270" text-anchor="middle" font-size="12">LSB Modification</text>
+</svg>
