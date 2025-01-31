@@ -19,6 +19,7 @@ typedef struct _DecodeInfo
     char *secret_fname;
     FILE *fptr_secret;
     char extn_secret_file[MAX_FILE_SUFFIX];
+    uint file_size;
 
 
 
@@ -38,8 +39,11 @@ Status_d decode_file_extn(DecodeInfo *dncInfo);
 
 Status_d decode_file_size(DecodeInfo *dncInfo);
 
+Status_d decode_file_data(DecodeInfo *dncInfo);
+
 char decode_8(DecodeInfo *dncInfo);
 
 char byte8_decode_to_char(char buff[]);
 
 #endif
+

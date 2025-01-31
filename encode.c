@@ -124,7 +124,7 @@ Status read_and_validate_encode_args(char *argv[], EncodeInfo *encInfo)
     //checking whether 4 argument exists
     if(argv[4]==NULL)
     {
-        printf("INFO: Output File not mentioned. Creating steged_img.bmp as default\n");
+        print_sleep("INFO: Output File not mentioned. Creating steged_img.bmp as default\n");
         encInfo->stego_image_fname="steged_img.bmp";
         return e_success;
     }
@@ -296,18 +296,18 @@ Status do_encoding(EncodeInfo *encInfo)
     {
         //opening required file in open_files function
         print_sleep("INFO: Opened %s\n",encInfo->src_image_fname);
-        printf("INFO: Opened %s\n",encInfo->secret_fname);
-        printf("INFO: Opened %s\n",encInfo->stego_image_fname);
+        print_sleep("INFO: Opened %s\n",encInfo->secret_fname);
+        print_sleep("INFO: Opened %s\n",encInfo->stego_image_fname);
     }
     else
     {
         exit(0);
     }
 
-    printf("INFO: Done\n");
+    print_sleep("INFO: Done\n");
 
 
-    printf("INFO: ## Encoding Procedure Started ##\n");
+    print_sleep("INFO: ## Encoding Procedure Started ##\n");
 
     print_sleep("INFO: Checking for %s size\n",encInfo->secret_fname);
     if(check_capacity(encInfo)==e_success)
@@ -322,7 +322,7 @@ Status do_encoding(EncodeInfo *encInfo)
 
     // encode starts
     // copy header to stego
-    printf("INFO: Copying imager header\n");
+    print_sleep("INFO: Copying imager header\n");
     if(copy_bmp_header(encInfo->fptr_src_image,encInfo->fptr_stego_image)==e_success)
     {
         print_sleep("INFO: Done\n");
@@ -336,7 +336,7 @@ Status do_encoding(EncodeInfo *encInfo)
 
 
     //encode magic string
-    printf("INFO: Encoding Magic String signature\n");
+    print_sleep("INFO: Encoding Magic String signature\n");
     if(encode_magic_string(MAGIC_STRING,encInfo)==e_success)
     {
         print_sleep("INFO: Done\n");
@@ -349,7 +349,7 @@ Status do_encoding(EncodeInfo *encInfo)
 
     
     //encode secret file extension
-    printf("INFO: Encoding %s file extension \n",encInfo->secret_fname);
+    print_sleep("INFO: Encoding %s file extension \n",encInfo->secret_fname);
     if(encode_secret_file_extn(encInfo->extn_secret_file,encInfo)==e_success)
     {
         print_sleep("INFO: Done\n");  
@@ -362,7 +362,7 @@ Status do_encoding(EncodeInfo *encInfo)
     
 
     //encode secret file size
-    printf("INFO: Encoding %s file size \n",encInfo->secret_fname);
+    print_sleep("INFO: Encoding %s file size \n",encInfo->secret_fname);
     if(encode_secret_file_size(encInfo->size_secret_file,encInfo)==e_success)
     {
         print_sleep("INFO: Done\n");  
@@ -374,7 +374,7 @@ Status do_encoding(EncodeInfo *encInfo)
     }
     
     //encode secret file data
-    printf("INFO: Encoding %s file data \n",encInfo->secret_fname);
+    print_sleep("INFO: Encoding %s file data \n",encInfo->secret_fname);
     if(encode_secret_file_data(encInfo)==e_success)
     {
         print_sleep("INFO: Done\n");  
@@ -386,7 +386,7 @@ Status do_encoding(EncodeInfo *encInfo)
     }
     
     //copy remaining secret file data
-    printf("INFO: Copying left over data \n");
+    print_sleep("INFO: Copying left over data \n");
     if(copy_remaining_img_data(encInfo->fptr_src_image,encInfo->fptr_stego_image)==e_success)
     {
         print_sleep("INFO: Done\n");  

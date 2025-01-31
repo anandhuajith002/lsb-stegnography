@@ -27,6 +27,8 @@ Status_d read_and_validate_decode_args(char *argv[], DecodeInfo *dncInfo)
 
         return d_success;   
     }
+    dncInfo->secret_fname=NULL;
+
     return d_success; 
 }
 
@@ -44,6 +46,27 @@ Status_d open_steg(DecodeInfo *dncInfo)
     }
     return d_success;
 
+
+}
+
+//opening destination file
+Status_d open_secret(DecodeInfo *dncInfo)
+{
+    if(dncInfo->secret_fname == NULL || dncInfo->secret_fname[0] == '\0')
+    {
+        dncInfo->secret_fname="decode.txt";
+        print_sleep("INFO: Output file not mentioned, creating decode.txt as default\n");
+    }
+
+    dncInfo->fptr_secret = fopen(dncInfo->secret_fname,"wb");
+    //errror handling
+    if (dncInfo->fptr_secret == NULL)
+    {
+    	perror("fopen");
+    	fprintf(stderr, "ERROR: Unable to open file %s\n", dncInfo->secret_fname);
+    	return d_failure;
+    }
+    return d_success;
 
 }
 
@@ -79,7 +102,7 @@ char decode_8(DecodeInfo *dncInfo)
     fread(byte_buff,8,1,dncInfo->fptr_stego_image);
     char ch=byte8_decode_to_char(byte_buff);
     // for (int i = 0; i < 8; i++) {
-    //         printf("%02X ", byte_buff[i]);  
+    //         print_sleep("%02X ", byte_buff[i]);  
     //     }
     return ch;
 }
@@ -99,26 +122,7 @@ char byte8_decode_to_char(char buff[])
 
 }
 
-//opening destination file
-Status_d open_secret(DecodeInfo *dncInfo)
-{
-    if(dncInfo->secret_fname == NULL || dncInfo->secret_fname[0] == '\0')
-    {
-        dncInfo->secret_fname="decode.txt";
-        print_sleep("INFO: Output file not mentioned, creating decode.txt as default\n");
-    }
 
-    dncInfo->fptr_secret = fopen(dncInfo->secret_fname,"wb");
-    //errror handling
-    if (dncInfo->fptr_secret == NULL)
-    {
-    	perror("fopen");
-    	fprintf(stderr, "ERROR: Unable to open file %s\n", dncInfo->secret_fname);
-    	return d_failure;
-    }
-    return d_success;
-
-}
 
 
 Status_d decode_file_extn(DecodeInfo *dncInfo)
@@ -141,6 +145,44 @@ Status_d decode_file_extn(DecodeInfo *dncInfo)
     return d_success;
 }
 
+Status_d decode_file_size(DecodeInfo *dncInfo)
+{
+    //decoding 4 byte file size
+    char file_size[4];
+    uint size;
+    for(int i=0;i<4;i++)
+    {
+        file_size[i]=decode_8(dncInfo);
+    }
+
+    //converting the character array to int
+    char *ch=(char *)&size;
+    for(int i=0;i<4;i++)
+    {
+        *(ch+i)=file_size[3-i];
+    }
+    dncInfo->file_size=size;
+    return d_success;
+
+}
+
+
+Status_d decode_file_data(DecodeInfo *dncInfo)
+{
+    int size= dncInfo->file_size;
+    char buff[size];
+    for(int i=0;i<size;i++)
+    {
+        buff[i]=decode_8(dncInfo);
+
+    }
+    buff[size]='\0';
+
+    fwrite(buff,size,1,dncInfo->fptr_secret);
+    return d_success;
+
+}
+
 Status_d do_decoding(DecodeInfo *dncInfo)
 {
     print_sleep("INFO: ## Decoding Procedure Started ##\n");
@@ -158,7 +200,7 @@ Status_d do_decoding(DecodeInfo *dncInfo)
     }
 
     //check if magic string is present
-    printf("INFO: Decoding Magic String signature\n");
+    print_sleep("INFO: Decoding Magic String signature\n");
     if(decode_magic_string(MAGIC_STRING,dncInfo)==d_success)
     {
         print_sleep("INFO: Done\n");
@@ -192,7 +234,35 @@ Status_d do_decoding(DecodeInfo *dncInfo)
         print_sleep("INFO: error decoding file extension\n");
 
     }
-    
+
+
+    print_sleep("INFO: Decoding file size from %s\n",dncInfo->stego_image_fname);
+    if(decode_file_size(dncInfo)==d_success)
+    {
+        print_sleep("INFO: Done\n");
+    }
+    else
+    {
+        print_sleep("INFO: error decoding file size\n");
+
+    }
+
+
+    print_sleep("INFO: Decoding file data from %s\n",dncInfo->stego_image_fname);
+    if(decode_file_data(dncInfo)==d_success)
+    {
+        print_sleep("INFO: Done\n");
+    }
+    else
+    {
+        print_sleep("INFO: error decoding file data\n");
+
+    }
+
+    print_sleep("INFO: ## Decoding done sucdessfully ##");
+
+
+
 
 
 

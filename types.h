@@ -15,7 +15,7 @@ typedef enum
 
 #define print_sleep(fmt, ...) \
     do { \
-        sleep(1); \
+        usleep(500000); \
         printf(fmt, ##__VA_ARGS__); \
     } while (0)
 
