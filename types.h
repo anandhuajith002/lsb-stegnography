@@ -3,6 +3,8 @@
 
 /* User defined types */
 typedef unsigned int uint;
+#include<unistd.h>
+#include<stdio.h>
 
 /* Status will be used in fn. return type */
 typedef enum
@@ -10,6 +12,19 @@ typedef enum
     e_success,
     e_failure
 } Status;
+
+#define print_sleep(fmt, ...) \
+    do { \
+        sleep(1); \
+        printf(fmt, ##__VA_ARGS__); \
+    } while (0)
+
+
+typedef enum
+{
+    d_success,
+    d_failure
+} Status_d;
 
 typedef enum
 {
