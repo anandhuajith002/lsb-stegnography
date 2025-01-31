@@ -3,9 +3,6 @@
 ## Overview
 A command-line tool for hiding secret messages within BMP images using Least Significant Bit (LSB) steganography technique.
 
-## Steganography Visualization
-![LSB Steganography](steganography-visualization.svg)
-
 ## Features
 - Embed secret text files into BMP images
 - Extract hidden messages from steganographic images
